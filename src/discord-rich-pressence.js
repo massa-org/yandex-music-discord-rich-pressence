@@ -7,16 +7,10 @@ const discord = new Client({
   transport: { type: "ipc" },
 });
 
-const readyPromise = new Promise((r, e) =>
-  discord.on("ready", () => {
-    console.log("Discord connected");
-    r();
-  })
-);
-instance.post("/update", async (req, res) => {
-  await readyPromise;
-  const { track, artist, cover } = req.body;
+let discordIsReady = false;
+let lastUpdateData = null;
 
+function updatePresence({ track, artist, cover }) {
   discord.user?.setActivity({
     state: artist,
     details: track,
@@ -30,8 +24,27 @@ instance.post("/update", async (req, res) => {
     //   }
     // ]
   });
+}
+
+instance.post("/update", async (req, res) => {
+  // omit unused parameters
+  const { track, artist, cover } = req.body;
+  const updateData = { track, artist, cover };
+  if (!discordIsReady) {
+    lastUpdateData = updateData;
+    return {};
+  }
+  updatePresence(updateData);
 
   return {};
+});
+
+discord.on("ready", () => {
+  console.log("Discord connected");
+  discordIsReady = true;
+  if (lastUpdateData != null) {
+    updatePresence(lastUpdateData);
+  }
 });
 
 discord.login();
