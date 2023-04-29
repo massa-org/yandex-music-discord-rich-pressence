@@ -1,15 +1,22 @@
-# Elysia with Bun runtime
+# Yandex music discor rich pressence
+Use tampermonkey to watch yandex music track changes in browser
+then update discord rich pressence through node server
 
-## Getting Started
-To get started with this template, simply paste this command into your terminal:
-```bash
-bun create elysia ./elysia-example
+## Getting started 
+
+add `src/tampermonkey-watch-script.js` script to tampermonkey userscript
+
+Run rich pressence server
+```shell
+pnpm install
+pnpm run start
 ```
+Open `yandex.music.ru` and enjoy rich pressence
 
-## Development
-To start the development server run:
-```bash
-bun run dev
-```
+## Why tampermonkey?
+Tampermonkey used cause yandex.music does't provide public api/sdk.
+Non offical sdk is broken (python) does't get track list properly and require manualy token extraction. NodeJs sdk just outdated and not work.
 
-Open http://localhost:3000/ with your browser to see the result.
+So simpliest solution just use tampermonkey and extract minimal information direclty from web page.
+
+Yeah it does't work in application
