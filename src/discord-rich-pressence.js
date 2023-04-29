@@ -20,7 +20,7 @@ instance.post("/update", async (req, res) => {
   discord.user?.setActivity({
     state: artist,
     details: track,
-    largeImageKey: cover.replace("50x50", "400x400"), //"yandex-music-icon",
+    largeImageKey: cover?.replace("50x50", "400x400") ?? "yandex-music-icon",
     // startTimestamp: 1682706503686,
     // endTimestamp: 1682706503686 + 300 * 1000,
     // buttons: [
