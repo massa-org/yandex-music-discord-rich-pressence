@@ -22,7 +22,7 @@ function updatePresence(updateCommand) {
     discord.user?.setActivity({
       state: artist,
       details: track,
-      largeImageKey: cover?.replace("50x50", "400x400") ?? "yandex-music-icon",
+      largeImageKey: cover ?? "yandex-music-icon",
     });
   }
 }

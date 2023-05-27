@@ -12,25 +12,26 @@
 
 (function () {
   "use strict";
+  const server = "http://localhost:3333";
+
+  const document = window.top.document;
+
   function getTrackName() {
-    return window.top.document.querySelector(".track__name-innerwrap")
-      ?.innerText;
+    return document.querySelector(".track__name-innerwrap")?.innerText;
   }
 
   function getArtists() {
-    return window.top.document.querySelector(".track__artists")?.innerText;
+    return document.querySelector(".track__artists")?.innerText;
   }
 
   function getCover() {
-    return window.top.document.querySelector(
-      ".track_type_player .entity-cover__image.deco-pane"
-    )?.src;
+    return document
+      .querySelector(".track_type_player .entity-cover__image.deco-pane")
+      ?.src?.replace("50x50", "400x400");
   }
 
   function getIsPaused() {
-    return !(
-      window.top.document.querySelector(".player-controls__btn_pause") != null
-    );
+    return !(document.querySelector(".player-controls__btn_pause") != null);
   }
 
   let trackName = null;
@@ -43,8 +44,10 @@
     const cover = getCover();
     const _isPaused = getIsPaused();
 
-    if (trackName == track && artistName == artist && _isPaused == isPaused)
-      return;
+    const isChanged =
+      trackName != track || artistName != artist || _isPaused != isPaused;
+
+    if (!isChanged) return;
     trackName = track;
     artistName = artist;
     isPaused = _isPaused;
@@ -57,7 +60,7 @@
     if (isPaused) {
       GM_xmlhttpRequest({
         method: "POST",
-        url: "http://localhost:3333/update",
+        url: `${server}/update`,
         data: JSON.stringify({ type: "clear" }),
         headers: { "Content-Type": "application/json" },
         overrideMimeType: "application/json",
@@ -65,7 +68,7 @@
     } else {
       GM_xmlhttpRequest({
         method: "POST",
-        url: "http://localhost:3333/update",
+        url: `${server}/update`,
         data: JSON.stringify({
           type: "update",
           track,
