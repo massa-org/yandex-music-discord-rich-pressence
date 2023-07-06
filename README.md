@@ -4,13 +4,10 @@ then update discord rich pressence through node server
 
 ## Getting started 
 
-add `src/tampermonkey-watch-script.js` script to tampermonkey userscript
+add `watch-script/src/tampermonkey-watch-script.js` script to tampermonkey userscript
 
-Run rich pressence server
-```shell
-pnpm install
-pnpm run start
-```
+run one of rich pressence servers
+
 Open `yandex.music.ru` and enjoy rich pressence
 
 ## Why tampermonkey?

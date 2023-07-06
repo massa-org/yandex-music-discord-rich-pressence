@@ -14,19 +14,19 @@
   "use strict";
   const server = "http://localhost:3333";
 
-  const document = window.top.document;
+  const document = window.top?.document;
 
   function getTrackName() {
-    return document.querySelector(".track__name-innerwrap")?.innerText;
+    return document?.querySelector(".track__name-innerwrap")?.innerText;
   }
 
   function getArtists() {
-    return document.querySelector(".track__artists")?.innerText;
+    return document?.querySelector(".track__artists")?.innerText;
   }
 
   function getCover() {
     return document
-      .querySelector(".track_type_player .entity-cover__image.deco-pane")
+      ?.querySelector(".track_type_player .entity-cover__image.deco-pane")
       ?.src?.replace("50x50", "400x400");
   }
 

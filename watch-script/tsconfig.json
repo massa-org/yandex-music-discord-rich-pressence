@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "target": "es2016",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "types": ["tampermonkey"],
+    "lib": ["es2016", "dom"],
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "include": ["./src/*"]
+}

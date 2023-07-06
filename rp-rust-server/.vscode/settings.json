@@ -1,0 +1,8 @@
+{
+    "rust-analyzer.runnableEnv": {
+        "DISCORD_GAME_SDK_PATH": "${workspaceFolder}/discord_sdk"
+    },
+    "rust-analyzer.cargo.extraEnv": {
+        "DISCORD_GAME_SDK_PATH": "${workspaceFolder}/discord_sdk"
+    }
+}
