@@ -53,33 +53,72 @@
     isPaused = _isPaused;
 
     console.log(
-      `Report state to server: ${
+      `http: report state to server: ${
         isPaused ? "pause" : "play"
       } ${track} - ${artist}`
     );
-    if (isPaused) {
-      GM_xmlhttpRequest({
-        method: "POST",
-        url: `${server}/update`,
-        data: JSON.stringify({ type: "clear" }),
-        headers: { "Content-Type": "application/json" },
-        overrideMimeType: "application/json",
-      });
-    } else {
-      GM_xmlhttpRequest({
-        method: "POST",
-        url: `${server}/update`,
-        data: JSON.stringify({
-          type: "update",
-          track,
-          artist,
-          cover,
-        }),
-        headers: { "Content-Type": "application/json" },
-        overrideMimeType: "application/json",
-      });
-    }
+
+    GM_xmlhttpRequest({
+      method: "POST",
+      url: `${server}/update`,
+      data: JSON.stringify(
+        isPaused
+          ? { type: "clear" }
+          : {
+              type: "update",
+              track,
+              artist,
+              cover,
+            }
+      ),
+      headers: { "Content-Type": "application/json" },
+      overrideMimeType: "application/json",
+    });
   }
 
-  setInterval(update, 5000);
+  const observeDOM = (function () {
+    const MutationObserver =
+      window.MutationObserver || window.WebKitMutationObserver;
+
+    return function (obj, callback) {
+      if (!obj || obj.nodeType !== 1) return;
+
+      if (MutationObserver) {
+        // define a new observer
+        var mutationObserver = new MutationObserver(callback);
+
+        // have the observer observe for changes in children
+        mutationObserver.observe(obj, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+        });
+        return mutationObserver;
+      }
+
+      // browser support fallback
+      else if (window.addEventListener) {
+        obj.addEventListener("DOMNodeInserted", callback, false);
+        obj.addEventListener("DOMNodeRemoved", callback, false);
+      }
+    };
+  })();
+
+  observeDOM(
+    document.querySelector("div.player-controls__btn_play"),
+    function (_) {
+      console.log("event: play/pause");
+      setTimeout(update,30);
+    }
+  );
+
+  observeDOM(
+    document.querySelector("div.player-controls__track-container"),
+    function (_) {
+      console.log("event: track changed");
+      setTimeout(update,30);
+    }
+  );
+
+  // setInterval(update, 5000);
 })();
