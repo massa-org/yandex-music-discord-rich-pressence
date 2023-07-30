@@ -5,15 +5,15 @@ mod server_thread;
 use commands::PressenceUpdateCommand;
 use discord_thread::init_discord_thread;
 use server_thread::init_server;
-use std::{sync::mpsc::channel, thread};
+use std::thread;
 
-use tokio::runtime::Handle;
+use tokio::{runtime::Handle, sync::mpsc::channel};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let (tx, rx) = channel::<PressenceUpdateCommand>();
+    let (tx, mut rx) = channel::<PressenceUpdateCommand>(1);
 
-    let discord_thread = thread::spawn(move || init_discord_thread(rx));
+    let discord_thread = thread::spawn(move || init_discord_thread(&mut rx));
     let handler = Handle::current();
     let server_thread = thread::spawn(move || {
         handler.spawn(init_server(tx));
